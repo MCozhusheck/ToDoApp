@@ -5,14 +5,16 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "env-cmd -f ./.env nodemon ./app.js"
   },
   "author": "Maciej Kożuszek",
   "license": "MIT",
   "dependencies": {
     "bcrypt": "^3.0.7",
+    "env-cmd": "^10.0.1",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.8.11",
     "validator": "^12.2.0"
   }
 }
