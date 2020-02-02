@@ -10,6 +10,9 @@
   "author": "Maciej Kożuszek",
   "license": "MIT",
   "dependencies": {
-    "express": "^4.17.1"
+    "bcrypt": "^3.0.7",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "validator": "^12.2.0"
   }
 }
