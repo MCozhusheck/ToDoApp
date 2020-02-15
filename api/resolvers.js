@@ -1,7 +1,13 @@
 const resolvers = {
   Query: {
+    findByCredentials: (_, { input }, { models }) => {
+      return models.User.findByCredentials(input);
+    },
     users: (_, __, { models }) => {
       return models.User.find({});
+    },
+    findByEmail: (_, { input }, { models }) => {
+      return models.User.find(input);
     }
   },
   Mutation: {
