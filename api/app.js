@@ -11,9 +11,10 @@ const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context() {
-    return { models };
-  }
+  context: req => ({
+    models,
+    req
+  })
 });
 
 server.applyMiddleware({ app, path: '/graphql' });

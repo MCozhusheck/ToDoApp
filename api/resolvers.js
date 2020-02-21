@@ -1,8 +1,10 @@
 const jwt = require('jsonwebtoken');
+const { decodedToken } = require('./decodedToken');
 
 const resolvers = {
   Query: {
-    users: (_, __, { models }) => {
+    users: async (_, __, { models, req }) => {
+      const decoded = decodedToken(req);
       return models.User.find({});
     },
     findByEmail: (_, { input }, { models }) => {
