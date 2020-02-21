@@ -2,9 +2,6 @@ const jwt = require('jsonwebtoken');
 
 const resolvers = {
   Query: {
-    findByCredentials: (_, { input }, { models }) => {
-      return models.User.findByCredentials(input);
-    },
     users: (_, __, { models }) => {
       return models.User.find({});
     },
@@ -21,6 +18,14 @@ const resolvers = {
       const newUser = new models.User({ email, name, password });
       await newUser.save();
       return { token: jwt.sign({ _id: newUser._id }, process.env.JWT_KEY) };
+    },
+    loginUser: async (_, args, { models }) => {
+      const {
+        data: { email, password }
+      } = args;
+      const user = models.User.findByCredentials({ email, password });
+      if (!user) throw new Error('Unable to login!');
+      return { token: jwt.sign({ _id: user._id }, process.env.JWT_KEY) };
     }
   }
 };
