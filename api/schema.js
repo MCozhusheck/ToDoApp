@@ -7,16 +7,9 @@ const typeDefs = gql`
     findByEmail(email: String): [User]
   }
   type User {
-    name: String
-    email: String
-    password: String
-    tokens: [String]
-  }
-
-  input UserInput {
-    name: String
-    email: String
-    password: String
+    name: String!
+    email: String!
+    password: String!
   }
 
   input FindUserInput {
@@ -25,7 +18,20 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    newUser(input: UserInput): User!
+    signupUser(data: UserCreateInput!): AuthPayLoad!
+    loginUser(data: UserLoginInput!): AuthPayLoad!
+  }
+  input UserCreateInput {
+    email: String!
+    name: String!
+    password: String!
+  }
+  input UserLoginInput {
+    email: String!
+    password: String!
+  }
+  type AuthPayLoad {
+    token: String!
   }
 `;
 

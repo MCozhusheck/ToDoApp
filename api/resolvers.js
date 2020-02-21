@@ -1,3 +1,5 @@
+const jwt = require('jsonwebtoken');
+
 const resolvers = {
   Query: {
     findByCredentials: (_, { input }, { models }) => {
@@ -11,10 +13,14 @@ const resolvers = {
     }
   },
   Mutation: {
-    newUser: (_, { input }, { models }) => {
-      const newUser = new models.User(input);
-      newUser.save();
-      return newUser;
+    signupUser: async (_, args, { models }) => {
+      const {
+        data: { email, name, password }
+      } = args;
+      console.log(email, name, password);
+      const newUser = new models.User({ email, name, password });
+      await newUser.save();
+      return { token: jwt.sign({ _id: newUser._id }, process.env.JWT_KEY) };
     }
   }
 };
