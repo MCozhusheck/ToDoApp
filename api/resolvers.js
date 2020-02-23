@@ -1,10 +1,7 @@
-const jwt = require('jsonwebtoken');
-const { decodedToken } = require('./decodedToken');
-
 const resolvers = {
   Query: {
     users: async (_, __, { models, req }) => {
-      const decoded = decodedToken(req);
+      // const decoded = decodedToken(req);
       return models.User.find({});
     },
     findByEmail: (_, { input }, { models }) => {
@@ -18,7 +15,8 @@ const resolvers = {
       } = args;
       const newUser = new models.User({ email, name, password });
       await newUser.save();
-      return { token: jwt.sign({ _id: newUser._id }, process.env.JWT_KEY) };
+      const token = await newUser.generateAuthToken();
+      return { token };
     },
     loginUser: async (_, args, { models }) => {
       const {
