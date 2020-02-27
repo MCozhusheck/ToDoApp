@@ -22,9 +22,10 @@ const resolvers = {
       const {
         data: { email, password }
       } = args;
-      const user = models.User.findByCredentials({ email, password });
+      const user = await models.User.findByCredentials({ email, password });
       if (!user) throw new Error('Unable to login!');
-      return { token: jwt.sign({ _id: user._id }, process.env.JWT_KEY) };
+      const token = await user.generateAuthToken();
+      return {token}
     },
     addTodo: async (_, args, {models, req}) => {
       const {
