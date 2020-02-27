@@ -9,7 +9,7 @@ const todoSchema = mongoose.Schema({
   description: {
     type: String,
     required: false,
-    max: 40
+    max: 80
   },
   completed: {
     type: Boolean,

@@ -25,6 +25,24 @@ const resolvers = {
       const user = models.User.findByCredentials({ email, password });
       if (!user) throw new Error('Unable to login!');
       return { token: jwt.sign({ _id: user._id }, process.env.JWT_KEY) };
+    },
+    addTodo: async (_, args, {models, req}) => {
+      const {
+        data: {title, description, completed}
+      } = args;
+      const header =  req.req.headers.authorization;
+      const token = header.replace('Bearer ', '');
+      const user = await models.User.findOne({"tokens.token": token})
+      const todo = new models.Todo({title, description, completed});
+      user.todos.concat(todo);
+      user.save();
+      return todo
+    },
+    deleteTodo: async (_, args, {models}) => {
+
+    },
+    changeStatusTodo: async (_, args, {models}) => {
+
     }
   }
 };

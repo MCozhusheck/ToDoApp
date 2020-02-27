@@ -10,10 +10,19 @@ const typeDefs = gql`
     email: String!
     password: String!
   }
+  type Todo {
+    id: ID
+    title: String!
+    description: String
+    completed: Boolean
+  }
 
   type Mutation {
     signupUser(data: UserCreateInput!): AuthPayLoad!
     loginUser(data: UserLoginInput!): AuthPayLoad!
+    addTodo(data: TodoCreateInput!): Todo!
+    deleteTodo(data: ID): Todo!
+    changeStatusTodo(data: ID): Todo!
   }
   input UserCreateInput {
     email: String!
@@ -23,6 +32,11 @@ const typeDefs = gql`
   input UserLoginInput {
     email: String!
     password: String!
+  }
+  input TodoCreateInput {
+    title: String!
+    description: String
+    completed: Boolean
   }
   type AuthPayLoad {
     token: String!
