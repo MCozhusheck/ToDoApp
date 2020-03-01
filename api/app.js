@@ -11,10 +11,13 @@ const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: req => ({
-    models,
-    req
-  })
+  context: async ({req}) => {
+    const header =  req.headers.authorization;
+    const token = header.replace('Bearer ', '');
+    const user = await models.User.findOne({"tokens.token": token})
+
+    return {user,models}
+  }
 });
 
 server.applyMiddleware({ app, path: '/graphql' });
