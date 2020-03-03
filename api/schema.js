@@ -22,8 +22,8 @@ const typeDefs = gql`
     signupUser(data: UserCreateInput!): AuthPayLoad!
     loginUser(data: UserLoginInput!): AuthPayLoad!
     addTodo(data: TodoCreateInput!): Todo!
-    deleteTodo(data: ID): Todo!
-    changeStatusTodo(data: ID): Todo!
+    deleteTodo(data: ID): [Todo]!
+    changeStatusTodo(data: TodoChangeStatusInput): Todo!
   }
   input UserCreateInput {
     email: String!
@@ -38,6 +38,10 @@ const typeDefs = gql`
     title: String!
     description: String
     completed: Boolean
+  }
+  input TodoChangeStatusInput {
+    id: String!
+    completed: Boolean!
   }
   type AuthPayLoad {
     token: String!

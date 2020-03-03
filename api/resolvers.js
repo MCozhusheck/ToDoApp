@@ -4,50 +4,58 @@ const resolvers = {
       // const decoded = decodedToken(req);
       return User.find({});
     },
-    findByEmail: (_, { input }, { models }) => {
-      return models.User.find(input);
+    findByEmail: (_, { input }, { User }) => {
+      return User.find(input);
+    },
+    todos: async (_, __, {loggedUser}) => {
+      return loggedUser.todos
     }
   },
   Mutation: {
-    signupUser: async (_, args, { models }) => {
+    signupUser: async (_, args, { User }) => {
       const {
         data: { email, name, password }
       } = args;
-      const newUser = new models.User({ email, name, password });
+      const newUser = new User({ email, name, password });
       await newUser.save();
       const token = await newUser.generateAuthToken();
       return { token };
     },
-    loginUser: async (_, args, { models }) => {
+    loginUser: async (_, args, { User }) => {
       const {
         data: { email, password }
       } = args;
-      const user = await models.User.findByCredentials({ email, password });
+      const user = await User.findByCredentials({ email, password });
       if (!user) throw new Error('Unable to login!');
       const token = await user.generateAuthToken();
       return {token}
     },
-    addTodo: async (_, args, {models, user}) => {
+    addTodo: async (_, args, { loggedUser }) => {
       const {
         data: {title, description, completed}
       } = args;
-      const todo = new models.Todo({title, description, completed});
-      user.todos.concat(todo);
-      user.save();
+      const todo = loggedUser.todos.create({title, description, completed});
+      loggedUser.todos.push(todo);
+      loggedUser.save();
       return todo
     },
-    deleteTodo: async (_, args, {models, user}) => {
+    deleteTodo: async (_, args, { loggedUser }) => {
       const {
         data: id
       } = args;
-      console.log(id)
-      const todo = user.todos.remove(id)
-      user.save()
+      const todos = loggedUser.todos.pull(id)
+      loggedUser.save()
 
-      return todo
+      return todos
     },
-    changeStatusTodo: async (_, args, {models}) => {
-
+    changeStatusTodo: async (_, args, {loggedUser}) => {
+      const {
+        data: {id, completed}
+      } = args
+      const todo = loggedUser.todos.id(id)
+      todo.completed = completed
+      loggedUser.save()
+      return todo
     }
   }
 };
