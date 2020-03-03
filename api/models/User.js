@@ -3,6 +3,24 @@ const validator = require('validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
+const todoSchema = mongoose.Schema({
+  title: {
+    type: String,
+    required: [true, 'Title is quired'],
+    trim: true
+  },
+  description: {
+    type: String,
+    required: false,
+    max: 80
+  },
+  completed: {
+    type: Boolean,
+    required: false,
+    default: false
+  }
+});
+
 const userSchema = mongoose.Schema({
   name: {
     type: String,
@@ -33,13 +51,7 @@ const userSchema = mongoose.Schema({
       }
     }
   ],
-  todos: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Todo',
-      require: false
-    }
-  ]
+  todos: [todoSchema]
 });
 
 userSchema.pre('save', async function(next) {

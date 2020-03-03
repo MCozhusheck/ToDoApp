@@ -4,6 +4,7 @@ const typeDefs = gql`
   type Query {
     users: [User]
     findByEmail(email: String): [User]
+    todos: [Todo]
   }
   type User {
     name: String!
@@ -11,7 +12,7 @@ const typeDefs = gql`
     password: String!
   }
   type Todo {
-    id: ID
+    _id: ID
     title: String!
     description: String
     completed: Boolean

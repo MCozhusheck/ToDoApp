@@ -1,8 +1,8 @@
 const resolvers = {
   Query: {
-    users: async (_, __, { models, req }) => {
+    users: async (_, __, { User }) => {
       // const decoded = decodedToken(req);
-      return models.User.find({});
+      return User.find({});
     },
     findByEmail: (_, { input }, { models }) => {
       return models.User.find(input);
